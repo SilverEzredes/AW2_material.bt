@@ -1,0 +1,78 @@
+//------------------------------------------------
+//--- 010 Editor v11.0.1 Binary Template
+//
+//      File: AW2_material.bt
+//   Authors: SilverEzredes
+//   Version: October 30, 2023 - v1.0.2
+//   Purpose: Editing of Alan Wake 2 .material files
+//  Category: Northlight Engine
+// File Mask: *material
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+
+typedef struct {
+    uint Magic;
+    uint Version;
+    uint MaterialCount <name="Material Count">;
+} Header <name="Header">;
+
+typedef struct {
+    uint ParamNameLength;
+    char Material[ParamNameLength];
+    uint MaterialType;
+    if (MaterialType == 0)
+    {
+        float unkFloat;   
+    }
+    else if (MaterialType == 1) //vec2
+    {
+        float R, G;
+    }
+    else if (MaterialType == 2) //vec3
+    {
+        float R, G, B;
+    }
+    else if (MaterialType == 3) //vec4
+    {
+        float R, G, B, A;
+    }
+    else if (MaterialType == 4)
+    {
+        uint unkInt;
+    }
+    else if (MaterialType == 12) //bool
+    {
+        ubyte isEnabled;
+    }
+} MaterialEntry;
+
+typedef struct {
+    MaterialEntry Materials[header.MaterialCount] <optimize=false>;
+} Materials <name="Material Parameters">;
+
+typedef struct {
+    FSkip(8);   //padding after the material params
+    uint MMTR_Type;
+    if (MMTR_Type == 5)
+    {
+        char UNKNOWN_PATH[40]; //hashed path(s)?
+    }
+    else if (MMTR_Type == 7)
+    {
+        char UNKNOWN_PATH[56];
+    }
+    uint MMTR_NameLenght;
+    char MasterMaterial[MMTR_NameLenght];
+    uint unk1[2];
+    ushort Width;
+    ushort Height;
+} MasterMaterial <name="Master Material">;
+
+typedef struct {
+    Header header; 
+    Materials materials;
+    MasterMaterial mastermaterial;
+} AW2_Material;
+
+AW2_Material file;
