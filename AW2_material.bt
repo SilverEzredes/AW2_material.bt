@@ -3,13 +3,14 @@
 //
 //      File: AW2_material.bt
 //   Authors: SilverEzredes
-//   Version: October 30, 2023 - v1.0.2
+//   Version: November 03, 2023 - v1.0.3
 //   Purpose: Editing of Alan Wake 2 .material files
 //  Category: Northlight Engine
 // File Mask: *material
 //  ID Bytes: 
 //   History: 
 //------------------------------------------------
+//#include <LEB128.bt>
 
 typedef struct {
     uint Magic;
@@ -48,7 +49,7 @@ typedef struct {
 } MaterialEntry;
 
 typedef struct {
-    MaterialEntry Materials[header.MaterialCount] <optimize=false>;
+    MaterialEntry MaterialParams[header.MaterialCount] <optimize=false>;
 } Materials <name="Material Parameters">;
 
 typedef struct {
@@ -56,23 +57,24 @@ typedef struct {
     uint MMTR_Type;
     if (MMTR_Type == 5)
     {
-        char UNKNOWN_PATH[40]; //hashed path(s)?
+        char UNKNOWN_STRING[40]; //hashed path(s)? LEB128? 20 37 22 0F is a recurring int
     }
     else if (MMTR_Type == 7)
     {
-        char UNKNOWN_PATH[56];
+        //uleb128 unkVec4;
+        char UNKNOWN_STRING[56];
     }
-    uint MMTR_NameLenght;
-    char MasterMaterial[MMTR_NameLenght];
+    uint MMTR_NameLength;
+    char MasterMaterial[MMTR_NameLength];
     uint unk1[2];
     ushort Width;
     ushort Height;
 } MasterMaterial <name="Master Material">;
 
 typedef struct {
-    Header header; 
-    Materials materials;
-    MasterMaterial mastermaterial;
+    Header header <bgcolor=0xfc9003>;
+    Materials materials <bgcolor=0x039007>;
+    MasterMaterial mastermaterial <bgcolor=0x3492eb>;
 } AW2_Material;
 
-AW2_Material file;
+AW2_Material AW2Mat <name="AW2 Material File">;
