@@ -3,14 +3,13 @@
 //
 //      File: AW2_material.bt
 //   Authors: SilverEzredes
-//   Version: November 03, 2023 - v1.0.3
+//   Version: November 03, 2023 - v1.0.5
 //   Purpose: Editing of Alan Wake 2 .material files
 //  Category: Northlight Engine
 // File Mask: *material
 //  ID Bytes: 
 //   History: 
 //------------------------------------------------
-//#include <LEB128.bt>
 
 typedef struct {
     uint Magic;
@@ -24,7 +23,7 @@ typedef struct {
     uint MaterialType;
     if (MaterialType == 0)
     {
-        float unkFloat;   
+        float R;   
     }
     else if (MaterialType == 1) //vec2
     {
@@ -55,15 +54,7 @@ typedef struct {
 typedef struct {
     FSkip(8);   //padding after the material params
     uint MMTR_Type;
-    if (MMTR_Type == 5)
-    {
-        char UNKNOWN_STRING[40]; //hashed path(s)? LEB128? 20 37 22 0F is a recurring int
-    }
-    else if (MMTR_Type == 7)
-    {
-        //uleb128 unkVec4;
-        char UNKNOWN_STRING[56];
-    }
+    char UNKNOWN_STRING[MMTR_Type * 8]; //hashed path(s)? LEB128? 20 37 22 0F is a recurring int
     uint MMTR_NameLength;
     char MasterMaterial[MMTR_NameLength];
     uint unk1[2];
