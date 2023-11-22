@@ -3,7 +3,7 @@
 //
 //      File: AW2_material.bt
 //    Author: SilverEzredes
-//   Version: November 22, 2023 - v1.1.0
+//   Version: November 22, 2023 - v1.1.1
 //   Purpose: Editing of Alan Wake 2 .material files
 //  Category: Northlight Engine
 // File Mask: *material
@@ -14,77 +14,77 @@
 typedef struct {
     uint Magic;
     uint Version;
-    uint MaterialCount <name="Material Count">;
+    uint MaterialParamCount <name="Material Param Count">;
 } Header <name="Header">;
 
 typedef struct {
     uint ParamNameLength;
-    char Material[ParamNameLength];
-    uint MaterialType;
-    if (MaterialType == 0)
+    char ParamName[ParamNameLength];
+    uint MaterialParamType;
+    if (MaterialParamType == 0)
     {
         float R;   
     }
-    else if (MaterialType == 1) //vec2
+    else if (MaterialParamType == 1) //vec2
     {
         float R, G;
     }
-    else if (MaterialType == 2) //vec3
+    else if (MaterialParamType == 2) //vec3
     {
         float R, G, B;
     }
-    else if (MaterialType == 3) //vec4
+    else if (MaterialParamType == 3) //vec4
     {
         float R, G, B, A;
     }
-    else if (MaterialType == 4)
+    else if (MaterialParamType == 4)
     {
         uint unkInt;
     }
-    else if (MaterialType == 5)
+    else if (MaterialParamType == 5)
     {
         uint unkInt2;
     }
-    else if (MaterialType == 6)
+    else if (MaterialParamType == 6)
     {
         double unkDouble;
     }
-    else if (MaterialType == 12) //bool
+    else if (MaterialParamType == 12) //bool
     {
         ubyte isEnabled;
     }
-    else if (MaterialType == 17)
+    else if (MaterialParamType == 17)
     {
         uint unkInt3, unkInt4;
     }
-} MaterialEntry;
+} MaterialParamEntry;
 
 typedef struct {
-    MaterialEntry MaterialParams[header.MaterialCount] <optimize=false>;
+    MaterialParamEntry MaterialParam[header.MaterialParamCount] <optimize=false>;
     
-    uint Extra_Materials;
-    if (Extra_Materials == 0)
+    uint Extra_MaterialsParams;
+    if (Extra_MaterialsParams == 0)
         {
             FSkip(4);
             uint UNK;
             char UNKNOWN_STRING[UNK * 8]; //hashed path(s)? LEB128? 20 37 22 0F is a recurring int
         }
-    else if (Extra_Materials > 0) 
+    else if (Extra_MaterialsParams > 0) 
     {
         do 
         {
-            MaterialEntry MaterialParams[Extra_Materials] <optimize=false>;
-            uint EX_Extra_Materials;
-            Extra_Materials == EX_Extra_Materials;
+            MaterialParamEntry MaterialParam[Extra_MaterialsParams] <optimize=false>;
+            uint EX_Extra_MaterialsParams;
+            Extra_MaterialsParams == EX_Extra_MaterialsParams;
         } 
-        while (EX_Extra_Materials > 0);
+        while (EX_Extra_MaterialsParams > 0);
 
         uint UNK2;
         char UNKNOWN_STRING2[UNK2 * 8];
         uint UNK3;
         char UNKNOWN_STRING3[UNK3 * 8];
     }
-} Materials <name="Material Parameters">;
+} MaterialParams <name="Material Parameters">;
 
 typedef struct {
     uint MMTR_NameLength;
@@ -97,7 +97,7 @@ typedef struct {
 
 typedef struct {
     Header header <bgcolor=0x90F053>;
-    Materials materials <bgcolor=0x039007>;
+    MaterialParams materialparams <bgcolor=0x039007>;
     MasterMaterial mastermaterial <bgcolor=0x3492eb>;
 } AW2_Material;
 
