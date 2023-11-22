@@ -2,8 +2,8 @@
 //--- 010 Editor v11.0.1 Binary Template
 //
 //      File: AW2_material.bt
-//   Authors: SilverEzredes
-//   Version: November 03, 2023 - v1.0.5
+//    Author: SilverEzredes
+//   Version: November 22, 2023 - v1.1.0
 //   Purpose: Editing of Alan Wake 2 .material files
 //  Category: Northlight Engine
 // File Mask: *material
@@ -41,29 +41,62 @@ typedef struct {
     {
         uint unkInt;
     }
+    else if (MaterialType == 5)
+    {
+        uint unkInt2;
+    }
+    else if (MaterialType == 6)
+    {
+        double unkDouble;
+    }
     else if (MaterialType == 12) //bool
     {
         ubyte isEnabled;
+    }
+    else if (MaterialType == 17)
+    {
+        uint unkInt3, unkInt4;
     }
 } MaterialEntry;
 
 typedef struct {
     MaterialEntry MaterialParams[header.MaterialCount] <optimize=false>;
+    
+    uint Extra_Materials;
+    if (Extra_Materials == 0)
+        {
+            FSkip(4);
+            uint UNK;
+            char UNKNOWN_STRING[UNK * 8]; //hashed path(s)? LEB128? 20 37 22 0F is a recurring int
+        }
+    else if (Extra_Materials > 0) 
+    {
+        do 
+        {
+            MaterialEntry MaterialParams[Extra_Materials] <optimize=false>;
+            uint EX_Extra_Materials;
+            Extra_Materials == EX_Extra_Materials;
+        } 
+        while (EX_Extra_Materials > 0);
+
+        uint UNK2;
+        char UNKNOWN_STRING2[UNK2 * 8];
+        uint UNK3;
+        char UNKNOWN_STRING3[UNK3 * 8];
+    }
 } Materials <name="Material Parameters">;
 
 typedef struct {
-    FSkip(8);   //padding after the material params
-    uint MMTR_Type;
-    char UNKNOWN_STRING[MMTR_Type * 8]; //hashed path(s)? LEB128? 20 37 22 0F is a recurring int
     uint MMTR_NameLength;
     char MasterMaterial[MMTR_NameLength];
-    uint unk1[2];
+    uint UNK4;
+    uint UNK5;
     ushort Width;
     ushort Height;
 } MasterMaterial <name="Master Material">;
 
 typedef struct {
-    Header header <bgcolor=0xfc9003>;
+    Header header <bgcolor=0x90F053>;
     Materials materials <bgcolor=0x039007>;
     MasterMaterial mastermaterial <bgcolor=0x3492eb>;
 } AW2_Material;
