@@ -62,22 +62,22 @@ typedef struct {
 typedef struct {
     MaterialParamEntry MaterialParam[header.MaterialParamCount] <optimize=false>;
     
-    uint Extra_MaterialsParams;
-    if (Extra_MaterialsParams == 0)
+    uint Extra_MaterialParams;
+    if (Extra_MaterialParams == 0)
         {
             FSkip(4);
             uint UNK;
             char UNKNOWN_STRING[UNK * 8]; //hashed path(s)? LEB128? 20 37 22 0F is a recurring int
         }
-    else if (Extra_MaterialsParams > 0) 
+    else if (Extra_MaterialParams > 0) 
     {
         do 
         {
-            MaterialParamEntry MaterialParam[Extra_MaterialsParams] <optimize=false>;
-            uint EX_Extra_MaterialsParams;
-            Extra_MaterialsParams == EX_Extra_MaterialsParams;
+            MaterialParamEntry MaterialParam[Extra_MaterialParams] <optimize=false>;
+            uint EX_Extra_MaterialParams;
+            Extra_MaterialParams == EX_Extra_MaterialParams;
         } 
-        while (EX_Extra_MaterialsParams > 0);
+        while (EX_Extra_MaterialParams > 0);
 
         uint UNK2;
         char UNKNOWN_STRING2[UNK2 * 8];
