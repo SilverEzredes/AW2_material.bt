@@ -3,7 +3,7 @@
 //
 //      File: AW2_material.bt
 //    Author: SilverEzredes
-//   Version: November 22, 2023 - v1.1.1
+//   Version: November 23, 2023 - v1.1.3
 //   Purpose: Editing of Alan Wake 2 .material files
 //  Category: Northlight Engine
 // File Mask: *material
@@ -47,7 +47,7 @@ typedef struct {
     }
     else if (MaterialParamType == 6)
     {
-        double unkDouble;
+        char TextureHash[8];
     }
     else if (MaterialParamType == 12) //bool
     {
@@ -60,29 +60,33 @@ typedef struct {
 } MaterialParamEntry;
 
 typedef struct {
-    MaterialParamEntry MaterialParam[header.MaterialParamCount] <optimize=false>;
+    char TextureHash[8];
+} TextureHashEntry;
+
+typedef struct {
+    MaterialParamEntry MaterialParam[header.MaterialParamCount] <optimize=false, bgcolor=0x039007>;
     
-    uint Extra_MaterialParams;
+    uint Extra_MaterialParams <bgcolor=0xeb34a2>;
     if (Extra_MaterialParams == 0)
         {
             FSkip(4);
-            uint UNK;
-            char UNKNOWN_STRING[UNK * 8]; //hashed path(s)? LEB128? 20 37 22 0F is a recurring int
+            uint TextureHashCount <bgcolor=0x343434>;
+            TextureHashEntry Hash[TextureHashCount] <bgcolor=0x3434eb>;
         }
     else if (Extra_MaterialParams > 0) 
     {
         do 
         {
-            MaterialParamEntry MaterialParam[Extra_MaterialParams] <optimize=false>;
-            uint EX_Extra_MaterialParams;
+            MaterialParamEntry MaterialParam[Extra_MaterialParams] <optimize=false, bgcolor=0x039007>;
+            uint EX_Extra_MaterialParams <bgcolor=0xeb34a2>;
             Extra_MaterialParams == EX_Extra_MaterialParams;
         } 
         while (EX_Extra_MaterialParams > 0);
 
-        uint UNK2;
-        char UNKNOWN_STRING2[UNK2 * 8];
-        uint UNK3;
-        char UNKNOWN_STRING3[UNK3 * 8];
+        uint TextureHashCount <bgcolor=0x343434>;
+        TextureHashEntry Hash[TextureHashCount] <bgcolor=0x3434eb>;
+        uint TextureHashCount2 <bgcolor=0x343434>;
+        TextureHashEntry Hash2[TextureHashCount2] <bgcolor=0x3434eb>;
     }
 } MaterialParams <name="Material Parameters">;
 
@@ -96,8 +100,8 @@ typedef struct {
 } MasterMaterial <name="Master Material">;
 
 typedef struct {
-    Header header <bgcolor=0x90F053>;
-    MaterialParams materialparams <bgcolor=0x039007>;
+    Header header <bgcolor=0xf20014>;
+    MaterialParams materialparams;
     MasterMaterial mastermaterial <bgcolor=0x3492eb>;
 } AW2_Material;
 
