@@ -1,5 +1,5 @@
 # AW2_material.bt
-This is a 010 Editor Binary Template for reading Alan Wake 2 .material files.
+This is a 010 Editor Binary Template for reading and editing Alan Wake 2 .material files.
 
 # Installation:
 - Download via `Code -> Download as ZIP`
